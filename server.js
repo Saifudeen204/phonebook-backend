@@ -1,9 +1,11 @@
 const express = require('express')
-const app = express()
 const cors = require('cors')
-app.use(cors())
+const morgan = require('morgan')
+const app = express()
 
+app.use(cors())
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
   { id: "1", name: "Arto Hellas", number: "040-123456" },
@@ -59,6 +61,20 @@ app.post('/api/persons', (request, response) => {
   persons = persons.concat(person)
   response.json(person)
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+  next(error)
+}
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
