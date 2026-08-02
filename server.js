@@ -5,10 +5,7 @@ const Person = require('./models/person')
 
 app.use(cors())
 app.use(express.json())
-
-app.get('/', (request, response) => {
-  response.send('<h1>Phonebook backend</h1>')
-})
+app.use(express.static('dist'))
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
