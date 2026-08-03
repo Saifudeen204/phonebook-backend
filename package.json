@@ -12,6 +12,9 @@
     "morgan": "^1.10.0",
     "mongoose": "^8.0.0",
     "mongoose-unique-validator": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0"
   }
 }
 
