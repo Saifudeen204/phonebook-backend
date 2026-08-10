@@ -4,7 +4,8 @@
   "description": "Phonebook backend for Fullstack Open",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest --verbose"
   },
   "dependencies": {
     "express": "^4.19.2",
