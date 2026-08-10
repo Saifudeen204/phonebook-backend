@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Phonebook backend for Fullstack Open",
   "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "test": "jest --verbose"
+ "scripts": {
+  "start": "node server.js",
+  "test": "NODE_ENV=test jest --verbose --runInBand"
+}
   },
   "dependencies": {
     "express": "^4.19.2",
