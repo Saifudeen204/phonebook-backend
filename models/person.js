@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')
+console.log('DEBUG NODE_ENV:', process.env.NODE_ENV)
+console.log('DEBUG TEST_MONGODB_URI:', process.env.TEST_MONGODB_URI)
 
 const url = process.env.NODE_ENV === 'test'
   ? process.env.TEST_MONGODB_URI
