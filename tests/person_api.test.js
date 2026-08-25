@@ -87,7 +87,7 @@ describe('DELETE /api/persons/:id', () => {
     const personToDelete = personsAtStart[0]
 
     await api
-      .delete(/api/persons/${personToDelete.id})
+      .delete(`/api/persons/${personToDelete.id}`)
       .expect(204)
 
     const personsAtEnd = await helper.personsInDb()
