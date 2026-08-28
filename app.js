@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const Person = require('./models/person')
+const usersRouter = require('./controllers/users')
 
 app.use(cors())
 app.use(express.json())
@@ -47,6 +48,8 @@ app.post('/api/persons', (request, response, next) => {
     })
     .catch(error => next(error))
 })
+
+app.use('/api/users', usersRouter)
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })

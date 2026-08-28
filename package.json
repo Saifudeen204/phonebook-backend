@@ -8,8 +8,10 @@
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.0.0",
     "mongoose-unique-validator": "^5.0.0",
     "morgan": "^1.10.0"
