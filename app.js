@@ -6,18 +6,12 @@ const Person = require('./models/person')
 const User = require('./models/user')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
+const middleware = require('./utils/middleware')
 
 app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
-
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
+app.use(middleware.tokenExtractor)
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
@@ -49,7 +43,7 @@ app.post('/api/persons', async (request, response, next) => {
   const body = request.body
 
   try {
-    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'token invalid' })
     }
