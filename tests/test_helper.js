@@ -1,4 +1,5 @@
 const Person = require('../models/person')
+const User = require('../models/user')
 
 const initialPersons = [
   { name: 'Arto Hellas', number: '040-123456' },
@@ -10,4 +11,9 @@ const personsInDb = async () => {
   return persons.map(person => person.toJSON())
 }
 
-module.exports = { initialPersons, personsInDb }
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(user => user.toJSON())
+}
+
+module.exports = { initialPersons, personsInDb, usersInDb }
