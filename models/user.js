@@ -10,6 +10,12 @@ const userSchema = new mongoose.Schema({
   },
   name: String,
   passwordHash: String,
+  persons: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Person'
+    }
+  ],
 })
 
 userSchema.plugin(uniqueValidator)
