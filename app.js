@@ -1,9 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const jwt = require('jsonwebtoken')
 const Person = require('./models/person')
-const User = require('./models/user')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const middleware = require('./utils/middleware')
@@ -31,26 +29,36 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response, next) => {
-  Person.findByIdAndDelete(request.params.id)
-    .then(() => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
-})
-
-app.post('/api/persons', async (request, response, next) => {
-  const body = request.body
-
+app.delete('/api/persons/:id', middleware.userExtractor, async (request, response, next) => {
   try {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
+    const user = request.user
+    if (!user) {
       return response.status(401).json({ error: 'token invalid' })
     }
 
-    const user = await User.findById(decodedToken.id)
+    const person = await Person.findById(request.params.id)
+    if (!person) {
+      return response.status(404).end()
+    }
+
+    if (!person.user || person.user.toString() !== user._id.toString()) {
+      return response.status(401).json({ error: 'only the creator can delete this person' })
+    }
+
+    await Person.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.post('/api/persons', middleware.userExtractor, async (request, response, next) => {
+  const body = request.body
+
+  try {
+    const user = request.user
     if (!user) {
-      return response.status(400).json({ error: 'UserId missing or not valid' })
+      return response.status(401).json({ error: 'token invalid' })
     }
 
     const person = new Person({
